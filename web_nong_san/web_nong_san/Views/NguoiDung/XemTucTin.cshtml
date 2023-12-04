@@ -1,0 +1,148 @@
+﻿@model IEnumerable<web_nong_san.TINTUC>
+
+@{
+    ViewBag.Title = "XemTucTin";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img class="container-fluid" src="~/Content/Images/Icons/new_logo.png" style="height:300px;" />
+    </div>    
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            @*            <a class="navbar-brand" href="#">Nông Sản Sạch</a>
+            *@            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="@Url.Action("DanhSachSanPhamNguoiDung")">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("DanhSachSanPham","SanPham")">Sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("XemTucTin","NguoiDung")">Xem tin tức</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("GioHang","GioHang",new { id = ViewBag.UserInfo.MATK })">Giỏ hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" @*href="@Url.Action("TaiKhoan","Login")"*@>
+                            <img id="avatarImage" src="~/Content/Images/avatar/@ViewBag.ac_img" alt="Tài khoản của bạn" style="width:30px;height:30px;border-radius:3px;">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="modal fade" id="avatarModal" tabindex="-1" role="dialog" aria-labelledby="avatarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="avatarModalLabel">Thông tin tài khoản</h5>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <li class="list-group-item"><a class="btn btn-primary w-100" href="@Url.Action("AboutAccount","TaiKhoan",new { id = ViewBag.UserInfo.MATK })">Thông tin tài khoản</a></li>
+                        <li class="list-group-item"><a class="btn btn-primary w-100" href="@Url.Action("LogOut","Login")">Đăng xuất</a></li>
+                        <li class="list-group-item"><a class="btn btn-primary w-100" href="@Url.Action("AboutAccount","TaiKhoan",new { id = ViewBag.UserInfo.MATK })">Đổi mật khẩu</a></li>
+                        <li class="list-group-item"><a class="btn btn-primary w-100" href="@Url.Action("GioHang","GioHang",new { id = ViewBag.UserInfo.MATK })">Giỏ hàng</a></li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="closeAvatarModal()">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- News Slideshow Container -->
+    <div class="container news-container">
+        <h2 class="mb-4" id="today">Latest News Slideshow</h2>
+
+        <!-- Bootstrap 5 Carousel -->
+        <div id="newsCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @foreach (var (item, index) in Model.Select((value, i) => (value, i)))
+                {
+                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                        <img src="~/Content/Images/@item.HINH" class="d-block w-100" style="height:800px;width:800px;" alt="@item.TIEUDE">
+                        <div class="carousel-caption d-none d-md-block bg-white w-60">
+                            <h3 class="text-black">@item.TIEUDE</h3>
+                            <p class="text-black">@item.TOMTAT</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JavaScript Bundle (including Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="text-light text-center py-3" style="background-color:green">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Về chúng tôi</h5>
+                    <p>Your company description goes here.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Liên hệ</h5>
+                    <p>Email: anh@gma.com<br>Phone: (+84) 393 7483</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Theo dõi chúng tôi</h5>
+                    <a href="#" class="text-light"><i class="fa fa-facebook-f me-2"></i>Facebook</a><br>
+                    <a href="#" class="text-light"><i class="fa fa-twitter me-2"></i>Twitter</a><br>
+                    <a href="#" class="text-light"><i class="fa fa-linkedin-in me-2"></i>LinkedIn</a><br>
+                    <a href="#" class="text-light"><i class="fa fa-instagram me-2"></i>Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2">
+            <p>&copy; 2023 Your Company. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        $(function () {
+            $('#avatarImage').click(function () {
+                $('#avatarModal').modal('show');
+            });
+        });
+        function closeAvatarModal() {
+            $('#avatarModal').modal('hide');
+        }
+        $(document).on("input", "#searchInput", function () {
+            /*var inputValue = $(this).val();*/
+            searchProducts();
+        });
+        $(document).ready(function () {
+            var today = new Date();
+            var date = "News: " + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+            $("#today").html(date);
+        });
+    </script>
+</body>
+</html>
+
+

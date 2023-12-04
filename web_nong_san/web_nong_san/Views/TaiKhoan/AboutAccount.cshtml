@@ -1,0 +1,56 @@
+﻿@model web_nong_san.TAIKHOAN
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AboutAccount</title>
+    <!-- Liên kết Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="~/Content/Images/avatar/@Model.HINH" class="img-thumbnail" alt="Hình ảnh thành viên" style="width:100px;height:100px;">
+            </div>
+            <div class="col-md-8">
+                <h4>Thông tin thành viên</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Họ tên:</strong>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DisplayFor(model => model.HOTEN)
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Giới tính:</strong>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DisplayFor(model => model.GIOITINH)
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Địa chỉ:</strong>
+                    </div>                    
+                    <div class="col-md-3">
+                        <strong>Ngày đăng ký:</strong>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DisplayFor(model => model.NGAYDANGKY)
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    @Html.ActionLink("Chỉnh sửa", "Edit", new { id = Model.MATK }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Quay lại danh sách", "DanhSachSanPhamNguoiDung", "NguoiDung", null, new { @class = "btn btn-secondary" })
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

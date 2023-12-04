@@ -1,0 +1,173 @@
+﻿@model IEnumerable<web_nong_san.SANPHAM>
+
+@{
+    ViewBag.Title = "Danh Sách Sản Phẩm";
+    Layout = "~/Views/Shared/_LayoutAdmin2.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="~/Assets/plugin-table/jquery.dataTables.min.css" rel="stylesheet" />
+
+<div>
+    <a class="btn btn-primary" href="@Url.Action("ThemSanPham","SanPham")">Thêm sản phẩm</a>
+    <table class="table table-bordered table-striped" id="myTable">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th>
+                    Tên Sản Phẩm
+                </th>
+                <th>
+                    Giá
+                </th>
+                <th>
+                    Hình
+                </th>
+                <th>
+                    Loại Sản Phẩm
+                </th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TENSP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GIA)
+                    </td>
+                    <td>
+                        <img src="~/Content/Images/@item.HINH" alt="Hình ảnh" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LOAISANPHAM.TENLOAI)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Chỉnh sửa", "ChinhSuaSanPham", new { MASP = item.MASP }, new { @class = "btn btn-primary" })
+                        <button id="@item.MASP" class="delete-button btn btn-secondary" data-toggle="modal" data-target="#confirmationModal" data-mahsx="@item.MASP" onclick="laymahsx(@item.MASP)">Xóa</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Assets/plugin-table/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json"></script>
+<script>
+    var js = jQuery.noConflict(true);
+    js(document).ready(function () {
+        js('#myTable').DataTable({
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json"
+            }
+        });
+    });
+</script>
+<script>
+    var MASP;
+    function laymahsx(masp) {
+        MASP = masp;
+    }
+    function deleteHangSanXuat() {
+        /*var MAHSX = $("#").data("mahsx");*/
+        $("#confirmationModal").modal("hide"); // Đóng modal
+        $.ajax({
+            url: "/SanPham/XoaSanPham",
+            type: "POST",
+            data: { id: MASP },
+            success: function (response) {
+                // Xử lý phản hồi từ Controller (nếu cần)
+                if (response.success) {
+                    $("#deleteSuccessModal").modal("show");
+                } else {
+                    $("#deleteErrorModal").modal("show");
+                }
+                //window.location.href = "/HangSanXuat/DanhSachSanPham";
+            },
+            error: function (xhr, status, error) {
+                alert("Lỗi: " + error);
+            }
+        });
+    }
+
+    function confirmDelete() {
+        $("#confirmationModal").modal("show"); // Mở modal xác nhận
+    }
+    $(document).on("click", "#deleteErrorModalButton", function () {
+        $("#deleteErrorModal").modal("hide");
+    });
+
+    $(document).on("click", "#deleteSuccessModalButton", function () {
+        $("#deleteSuccessModal").modal("hide");
+    });
+    $(document).ready(function () {
+        var maxLength = 40; // Change this value to your desired character limit
+        $('.myText').each(function () {
+            var $myText = $(this);
+            var text = $myText.text();
+
+            if (text.length > maxLength) {
+                $myText.text(text.substring(0, maxLength) + '...');
+            }
+        });
+    });
+</script>
+<!-- Modal xác nhận xóa -->
+<div class="modal" id="confirmationModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận xóa</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteHangSanXuat()">Xóa</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xóa thành công -->
+<div class="modal" id="deleteSuccessModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Xóa thành công</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Xóa sản phẩm thành công.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteSuccessModalButton" type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal lỗi -->
+<div class="modal" id="deleteErrorModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Lỗi</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn không thể thực hiện xóa sản phẩm này!</p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteErrorModalButton" type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>

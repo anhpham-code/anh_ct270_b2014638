@@ -1,0 +1,123 @@
+﻿@model web_nong_san.SANPHAM
+
+@{
+    ViewBag.Title = "Chỉnh Sửa Sản Phẩm";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <header class="bg-dark text-white text-center py-3">
+        <h1>Chỉnh Sửa Sản Phẩm</h1>
+    </header>
+    <p class="container mt-4">
+        @Html.ActionLink("Về", "DanhSachSanPham", "SanPham", null, new { @class = "btn btn-primary" })
+    </p>
+    @using (Html.BeginForm("LuuChinhSuaSanPham", "SanPham", FormMethod.Post, new { @class = "form container" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.MASP) <!-- MASP là trường ẩn để xác định sản phẩm cần chỉnh sửa -->
+        <div class="container mt-4">
+            <div class="mb-3">
+                <label for="TENSP" class="form-label">Tên Sản Phẩm</label>
+                <div class="input-group">
+                    <input type="text" id="TENSP" name="TENSP" class="form-control" value="@Model.TENSP" required />
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="MACODE" class="form-label">Mã Code</label>
+                <div class="input-group">
+                    <input type="text" id="MACODE" name="MACODE" class="form-control" value="@Model.MACODE" required />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="URL" class="form-label">URL</label>
+                <div class="input-group ">
+                    <input type="text" id="URL" name="URL" class="form-control" value="@Model.URL" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="GIA" class="form-label">Giá</label>
+                <div class="input-group">
+                    <input type="number" id="GIA" name="GIA" class="form-control" value="@Model.GIA" required />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="SOLUONGTON" class="form-label">Số lượng</label>
+                <div class="input-group">
+                    <input type="number" id="SOLUONGTON" name="SOLUONGTON" class="form-control" value="@Model.SOLUONGTON" required />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Bán chạy</label>
+                <br />
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(model => model.BANCHAY, 1, new { @class = "form-check-input", id = "banchay-no" })
+                    <label class="form-check-label" for="banchay-yes">Có</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(model => model.BANCHAY, 0, new { @class = "form-check-input", id = "banchay-no" })
+                    <label class="form-check-label" for="banchay-no">Không</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Ẩn hiện</label>
+                <br />
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(model => model.ANHIEN, 1, new { @class = "form-check-input", id = "banchay-yes" })
+                    <label class="form-check-label" for="banchay-yes">Ẩn</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(model => model.ANHIEN, 0, new { @class = "form-check-input", id = "banchay-no" })
+                    <label class="form-check-label" for="banchay-no">Hiện</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="MOTANGAN" class="form-label">Mô tả ngắn</label>
+                <div class="input-group">
+                    <input type="text" id="MOTANGAN" name="MOTANGAN" class="form-control" value="@Model.MOTANGAN" required />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="MOTA" class="form-label">Mô tả</label>
+                <div class="input-group">
+                    <input type="text" id="MOTA" name="MOTA" class="form-control" value="@Model.MOTA" required />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="MAHSX" class="form-label">Mã Sản Xuất</label>
+                @Html.DropDownList("MAHSX", (IEnumerable<SelectListItem>)ViewBag.MAHSXList, "Chọn Mã Sản Xuất", new { @class = "form-control", required = "required" })
+            </div>
+            <div class="mb-3">
+                <label for="MALOAI" class="form-label">Mã Loại</label>
+                @Html.DropDownList("MALOAI", (IEnumerable<SelectListItem>)ViewBag.MALOAIList, "Chọn Mã Loại", new { @class = "form-control", required = "required" })
+            </div>
+            <div class="mb-3">
+                <label for="MAGIAMGIA" class="form-label">Mã Giảm Giá</label>
+                @Html.DropDownList("MAGIAMGIA", (IEnumerable<SelectListItem>)ViewBag.MAGIAMGIAList, "Chọn Mã Giảm Giá", new { @class = "form-control", required = "required" })
+            </div>
+            @if (!string.IsNullOrEmpty(Model.HINH))
+            {
+                <img src="@Url.Content("~/Content/Images/" + Model.HINH)" alt="Hình ảnh sản phẩm" />
+            }
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Thêm</button>
+            </div>
+        </div>
+
+    }
+</body>
+</html>

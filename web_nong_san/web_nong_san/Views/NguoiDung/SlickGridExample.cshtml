@@ -1,0 +1,46 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    Layout = null;
+}
+<!-- Các phần HTML khác ở đầu trang -->
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slickgrid/2.3.6/slick.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slickgrid/2.3.6/slick-theme.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slickgrid/2.3.6/slick.min.js"></script>
+
+</head>
+<body>
+    <!-- ... HTML hiện tại của bạn ... -->
+    <div id="slickGridContainer" style="height: 500px;"></div>
+    <!-- ... phần còn lại của HTML của bạn ... -->
+</body>
+<script>
+    var slickGridData = @Html.Raw(Json.Encode(Model));
+</script>
+<script>
+    $(function () {
+        var columns = [
+            // Định nghĩa cột của bạn ở đây
+            { id: "TENSP", name: "Tên sản phẩm", field: "TENSP" },
+            { id: "GIA", name: "Giá", field: "GIA" },
+            // Thêm nhiều cột khác cần thiết
+        ];
+
+        var options = {
+            enableCellNavigation: true,
+            enableColumnReorder: false,
+            autoHeight: true,
+        };
+
+        var dataView = new Slick.Data.DataView();
+        var grid = new Slick.Grid("#slickGridContainer", dataView, columns, options);
+
+        // Liên kết dữ liệu với lưới
+        dataView.beginUpdate();
+        dataView.setItems(slickGridData);
+        dataView.endUpdate();
+    });
+</script>
+

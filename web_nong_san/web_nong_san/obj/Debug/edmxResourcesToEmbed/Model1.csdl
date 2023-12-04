@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QL_NongSanSachModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CHITIETDONDAT">
+    <Key>
+      <PropertyRef Name="MADH" />
+      <PropertyRef Name="MASP" />
+    </Key>
+    <Property Name="MADH" Type="Int32" Nullable="false" />
+    <Property Name="MASP" Type="Int32" Nullable="false" />
+    <Property Name="SOLUONG" Type="Int32" />
+    <Property Name="THANHTIEN" Type="Int64" />
+    <Property Name="GIA" Type="Int64" />
+    <NavigationProperty Name="DONHANG" Relationship="Self.FK_CHITIETDONDAT_DONHANG" FromRole="CHITIETDONDAT" ToRole="DONHANG" />
+    <NavigationProperty Name="SANPHAM" Relationship="Self.FK_CHITIETDONDAT_SANPHAM" FromRole="CHITIETDONDAT" ToRole="SANPHAM" />
+  </EntityType>
+  <EntityType Name="CHITIETGIOHANG">
+    <Key>
+      <PropertyRef Name="MAGH" />
+      <PropertyRef Name="MASP" />
+    </Key>
+    <Property Name="MAGH" Type="Int32" Nullable="false" />
+    <Property Name="MASP" Type="Int32" Nullable="false" />
+    <Property Name="GIA" Type="Int64" />
+    <Property Name="SOLUONG" Type="Int32" />
+    <Property Name="THANHTIEN" Type="Int64" />
+    <NavigationProperty Name="GIOHANG" Relationship="Self.FK_CHITIETDONHANG_GIOHANG" FromRole="CHITIETGIOHANG" ToRole="GIOHANG" />
+    <NavigationProperty Name="SANPHAM" Relationship="Self.FK_CHITIETGIOHANG_SANPHAM" FromRole="CHITIETGIOHANG" ToRole="SANPHAM" />
+  </EntityType>
+  <EntityType Name="DIACHI">
+    <Key>
+      <PropertyRef Name="MADIACHI" />
+    </Key>
+    <Property Name="MADIACHI" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LOAIDIACHI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHITIET" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="MATK" Type="Int32" />
+    <NavigationProperty Name="TAIKHOAN" Relationship="Self.FK_DAICHI_TAIKHOAN" FromRole="DIACHI" ToRole="TAIKHOAN" />
+  </EntityType>
+  <EntityType Name="DONHANG">
+    <Key>
+      <PropertyRef Name="MADH" />
+    </Key>
+    <Property Name="MADH" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TRANGTHAI" Type="Int32" />
+    <Property Name="TONGTIEN" Type="Int64" />
+    <Property Name="MATK" Type="Int32" />
+    <Property Name="DIEMSUDUNG" Type="Int64" />
+    <Property Name="DIEMTICH" Type="Int64" />
+    <Property Name="HINHTHUCTHANHTOAN" Type="Int32" />
+    <Property Name="DIACHINHANHANG" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="CHITIETDONDATs" Relationship="Self.FK_CHITIETDONDAT_DONHANG" FromRole="DONHANG" ToRole="CHITIETDONDAT" />
+    <NavigationProperty Name="TAIKHOAN" Relationship="Self.FK_DONHANG_TAIKHOAN" FromRole="DONHANG" ToRole="TAIKHOAN" />
+  </EntityType>
+  <EntityType Name="GIAMGIA">
+    <Key>
+      <PropertyRef Name="MAGIAMGIA" />
+    </Key>
+    <Property Name="MAGIAMGIA" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GIAMGIA1" Type="Int64" />
+    <Property Name="TUNGAY" Type="DateTime" Precision="3" />
+    <Property Name="DENNGAY" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="SANPHAMs" Relationship="Self.FK_SANPHAM_GIAMGIA" FromRole="GIAMGIA" ToRole="SANPHAM" />
+  </EntityType>
+  <EntityType Name="GIOHANG">
+    <Key>
+      <PropertyRef Name="MAGH" />
+    </Key>
+    <Property Name="MAGH" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MATK" Type="Int32" Nullable="false" />
+    <Property Name="NGAYDATHANG" Type="DateTime" Precision="3" />
+    <Property Name="TONGTIEN" Type="Int64" />
+    <NavigationProperty Name="CHITIETGIOHANGs" Relationship="Self.FK_CHITIETDONHANG_GIOHANG" FromRole="GIOHANG" ToRole="CHITIETGIOHANG" />
+    <NavigationProperty Name="TAIKHOAN" Relationship="Self.FK_GIOHANG_TAIKHOAN" FromRole="GIOHANG" ToRole="TAIKHOAN" />
+  </EntityType>
+  <EntityType Name="HANGSANXUAT">
+    <Key>
+      <PropertyRef Name="MAHSX" />
+    </Key>
+    <Property Name="MAHSX" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TENHSX" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="GIOITHIEU" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="HINH" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="SANPHAMs" Relationship="Self.FK_SANPHAM_HANGSANXUAT" FromRole="HANGSANXUAT" ToRole="SANPHAM" />
+  </EntityType>
+  <EntityType Name="LOAISANPHAM">
+    <Key>
+      <PropertyRef Name="MALOAI" />
+    </Key>
+    <Property Name="MALOAI" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TENLOAI" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="150" FixedLength="true" Unicode="true" />
+    <Property Name="HINH" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="SANPHAMs" Relationship="Self.FK_SANPHAM_LOAISANPHAM" FromRole="LOAISANPHAM" ToRole="SANPHAM" />
+  </EntityType>
+  <EntityType Name="NHOMTIN">
+    <Key>
+      <PropertyRef Name="MALOAI" />
+    </Key>
+    <Property Name="MALOAI" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TENLOAI" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TINTUCs" Relationship="Self.FK_TINTUC_NHOMTIN" FromRole="NHOMTIN" ToRole="TINTUC" />
+  </EntityType>
+  <EntityType Name="SANPHAM">
+    <Key>
+      <PropertyRef Name="MASP" />
+    </Key>
+    <Property Name="MASP" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MACODE" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <Property Name="TENSP" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Name="GIA" Type="Int64" />
+    <Property Name="MAGIAMGIA" Type="Int32" />
+    <Property Name="HINH" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="SOLUONGTON" Type="Int32" />
+    <Property Name="NGAYNHAP" Type="DateTime" Precision="3" />
+    <Property Name="BANCHAY" Type="Int32" />
+    <Property Name="MOTANGAN" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="MOTA" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ANHIEN" Type="Int32" />
+    <Property Name="MAHSX" Type="Int32" Nullable="false" />
+    <Property Name="MALOAI" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CHITIETDONDATs" Relationship="Self.FK_CHITIETDONDAT_SANPHAM" FromRole="SANPHAM" ToRole="CHITIETDONDAT" />
+    <NavigationProperty Name="CHITIETGIOHANGs" Relationship="Self.FK_CHITIETGIOHANG_SANPHAM" FromRole="SANPHAM" ToRole="CHITIETGIOHANG" />
+    <NavigationProperty Name="GIAMGIA" Relationship="Self.FK_SANPHAM_GIAMGIA" FromRole="SANPHAM" ToRole="GIAMGIA" />
+    <NavigationProperty Name="HANGSANXUAT" Relationship="Self.FK_SANPHAM_HANGSANXUAT" FromRole="SANPHAM" ToRole="HANGSANXUAT" />
+    <NavigationProperty Name="LOAISANPHAM" Relationship="Self.FK_SANPHAM_LOAISANPHAM" FromRole="SANPHAM" ToRole="LOAISANPHAM" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TAIKHOAN">
+    <Key>
+      <PropertyRef Name="MATK" />
+    </Key>
+    <Property Name="MATK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TENDANGNHAP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="MATKHAU" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="HOTEN" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="GIOITINH" Type="Int32" />
+    <Property Name="EMAIL" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="NGAYDANGKY" Type="DateTime" Precision="3" />
+    <Property Name="QUYEN" Type="Int32" Nullable="false" />
+    <Property Name="HINH" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="SDT" Type="Int64" />
+    <Property Name="KICHHOAT" Type="Int32" />
+    <Property Name="DIEMTICHLUY" Type="Int64" />
+    <NavigationProperty Name="DIACHIs" Relationship="Self.FK_DAICHI_TAIKHOAN" FromRole="TAIKHOAN" ToRole="DIACHI" />
+    <NavigationProperty Name="DONHANGs" Relationship="Self.FK_DONHANG_TAIKHOAN" FromRole="TAIKHOAN" ToRole="DONHANG" />
+    <NavigationProperty Name="GIOHANGs" Relationship="Self.FK_GIOHANG_TAIKHOAN" FromRole="TAIKHOAN" ToRole="GIOHANG" />
+    <NavigationProperty Name="TINTUCs" Relationship="Self.FK_TINTUC_TAIKHOAN" FromRole="TAIKHOAN" ToRole="TINTUC" />
+  </EntityType>
+  <EntityType Name="THONGKE">
+    <Key>
+      <PropertyRef Name="MATK" />
+    </Key>
+    <Property Name="MATK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="THOIGIAN" Type="DateTime" Precision="3" />
+    <Property Name="SOTRUYCAP" Type="Int64" />
+  </EntityType>
+  <EntityType Name="TINTUC">
+    <Key>
+      <PropertyRef Name="MATT" />
+    </Key>
+    <Property Name="MATT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TIEUDE" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="HINH" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="NGAYDANG" Type="DateTime" Precision="3" />
+    <Property Name="TOMTAT" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NOIDUNG" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MANHOM" Type="Int32" />
+    <Property Name="MATK" Type="Int32" />
+    <NavigationProperty Name="NHOMTIN" Relationship="Self.FK_TINTUC_NHOMTIN" FromRole="TINTUC" ToRole="NHOMTIN" />
+    <NavigationProperty Name="TAIKHOAN" Relationship="Self.FK_TINTUC_TAIKHOAN" FromRole="TINTUC" ToRole="TAIKHOAN" />
+  </EntityType>
+  <Association Name="FK_CHITIETDONDAT_DONHANG">
+    <End Role="DONHANG" Type="Self.DONHANG" Multiplicity="1" />
+    <End Role="CHITIETDONDAT" Type="Self.CHITIETDONDAT" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DONHANG">
+        <PropertyRef Name="MADH" />
+      </Principal>
+      <Dependent Role="CHITIETDONDAT">
+        <PropertyRef Name="MADH" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CHITIETDONDAT_SANPHAM">
+    <End Role="SANPHAM" Type="Self.SANPHAM" Multiplicity="1" />
+    <End Role="CHITIETDONDAT" Type="Self.CHITIETDONDAT" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SANPHAM">
+        <PropertyRef Name="MASP" />
+      </Principal>
+      <Dependent Role="CHITIETDONDAT">
+        <PropertyRef Name="MASP" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CHITIETDONHANG_GIOHANG">
+    <End Role="GIOHANG" Type="Self.GIOHANG" Multiplicity="1" />
+    <End Role="CHITIETGIOHANG" Type="Self.CHITIETGIOHANG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GIOHANG">
+        <PropertyRef Name="MAGH" />
+      </Principal>
+      <Dependent Role="CHITIETGIOHANG">
+        <PropertyRef Name="MAGH" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CHITIETGIOHANG_SANPHAM">
+    <End Role="SANPHAM" Type="Self.SANPHAM" Multiplicity="1" />
+    <End Role="CHITIETGIOHANG" Type="Self.CHITIETGIOHANG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SANPHAM">
+        <PropertyRef Name="MASP" />
+      </Principal>
+      <Dependent Role="CHITIETGIOHANG">
+        <PropertyRef Name="MASP" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DAICHI_TAIKHOAN">
+    <End Role="TAIKHOAN" Type="Self.TAIKHOAN" Multiplicity="0..1" />
+    <End Role="DIACHI" Type="Self.DIACHI" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TAIKHOAN">
+        <PropertyRef Name="MATK" />
+      </Principal>
+      <Dependent Role="DIACHI">
+        <PropertyRef Name="MATK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DONHANG_TAIKHOAN">
+    <End Role="TAIKHOAN" Type="Self.TAIKHOAN" Multiplicity="0..1" />
+    <End Role="DONHANG" Type="Self.DONHANG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TAIKHOAN">
+        <PropertyRef Name="MATK" />
+      </Principal>
+      <Dependent Role="DONHANG">
+        <PropertyRef Name="MATK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SANPHAM_GIAMGIA">
+    <End Role="GIAMGIA" Type="Self.GIAMGIA" Multiplicity="0..1" />
+    <End Role="SANPHAM" Type="Self.SANPHAM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GIAMGIA">
+        <PropertyRef Name="MAGIAMGIA" />
+      </Principal>
+      <Dependent Role="SANPHAM">
+        <PropertyRef Name="MAGIAMGIA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GIOHANG_TAIKHOAN">
+    <End Role="TAIKHOAN" Type="Self.TAIKHOAN" Multiplicity="1" />
+    <End Role="GIOHANG" Type="Self.GIOHANG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TAIKHOAN">
+        <PropertyRef Name="MATK" />
+      </Principal>
+      <Dependent Role="GIOHANG">
+        <PropertyRef Name="MATK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SANPHAM_HANGSANXUAT">
+    <End Role="HANGSANXUAT" Type="Self.HANGSANXUAT" Multiplicity="1" />
+    <End Role="SANPHAM" Type="Self.SANPHAM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HANGSANXUAT">
+        <PropertyRef Name="MAHSX" />
+      </Principal>
+      <Dependent Role="SANPHAM">
+        <PropertyRef Name="MAHSX" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SANPHAM_LOAISANPHAM">
+    <End Role="LOAISANPHAM" Type="Self.LOAISANPHAM" Multiplicity="1" />
+    <End Role="SANPHAM" Type="Self.SANPHAM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LOAISANPHAM">
+        <PropertyRef Name="MALOAI" />
+      </Principal>
+      <Dependent Role="SANPHAM">
+        <PropertyRef Name="MALOAI" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TINTUC_NHOMTIN">
+    <End Role="NHOMTIN" Type="Self.NHOMTIN" Multiplicity="0..1" />
+    <End Role="TINTUC" Type="Self.TINTUC" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NHOMTIN">
+        <PropertyRef Name="MALOAI" />
+      </Principal>
+      <Dependent Role="TINTUC">
+        <PropertyRef Name="MANHOM" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TINTUC_TAIKHOAN">
+    <End Role="TAIKHOAN" Type="Self.TAIKHOAN" Multiplicity="0..1" />
+    <End Role="TINTUC" Type="Self.TINTUC" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TAIKHOAN">
+        <PropertyRef Name="MATK" />
+      </Principal>
+      <Dependent Role="TINTUC">
+        <PropertyRef Name="MATK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QL_NongSanSachEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CHITIETDONDATs" EntityType="Self.CHITIETDONDAT" />
+    <EntitySet Name="CHITIETGIOHANGs" EntityType="Self.CHITIETGIOHANG" />
+    <EntitySet Name="DIACHIs" EntityType="Self.DIACHI" />
+    <EntitySet Name="DONHANGs" EntityType="Self.DONHANG" />
+    <EntitySet Name="GIAMGIAs" EntityType="Self.GIAMGIA" />
+    <EntitySet Name="GIOHANGs" EntityType="Self.GIOHANG" />
+    <EntitySet Name="HANGSANXUATs" EntityType="Self.HANGSANXUAT" />
+    <EntitySet Name="LOAISANPHAMs" EntityType="Self.LOAISANPHAM" />
+    <EntitySet Name="NHOMTINs" EntityType="Self.NHOMTIN" />
+    <EntitySet Name="SANPHAMs" EntityType="Self.SANPHAM" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="TAIKHOANs" EntityType="Self.TAIKHOAN" />
+    <EntitySet Name="THONGKEs" EntityType="Self.THONGKE" />
+    <EntitySet Name="TINTUCs" EntityType="Self.TINTUC" />
+    <AssociationSet Name="FK_CHITIETDONDAT_DONHANG" Association="Self.FK_CHITIETDONDAT_DONHANG">
+      <End Role="DONHANG" EntitySet="DONHANGs" />
+      <End Role="CHITIETDONDAT" EntitySet="CHITIETDONDATs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CHITIETDONDAT_SANPHAM" Association="Self.FK_CHITIETDONDAT_SANPHAM">
+      <End Role="SANPHAM" EntitySet="SANPHAMs" />
+      <End Role="CHITIETDONDAT" EntitySet="CHITIETDONDATs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CHITIETDONHANG_GIOHANG" Association="Self.FK_CHITIETDONHANG_GIOHANG">
+      <End Role="GIOHANG" EntitySet="GIOHANGs" />
+      <End Role="CHITIETGIOHANG" EntitySet="CHITIETGIOHANGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CHITIETGIOHANG_SANPHAM" Association="Self.FK_CHITIETGIOHANG_SANPHAM">
+      <End Role="SANPHAM" EntitySet="SANPHAMs" />
+      <End Role="CHITIETGIOHANG" EntitySet="CHITIETGIOHANGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DAICHI_TAIKHOAN" Association="Self.FK_DAICHI_TAIKHOAN">
+      <End Role="TAIKHOAN" EntitySet="TAIKHOANs" />
+      <End Role="DIACHI" EntitySet="DIACHIs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DONHANG_TAIKHOAN" Association="Self.FK_DONHANG_TAIKHOAN">
+      <End Role="TAIKHOAN" EntitySet="TAIKHOANs" />
+      <End Role="DONHANG" EntitySet="DONHANGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SANPHAM_GIAMGIA" Association="Self.FK_SANPHAM_GIAMGIA">
+      <End Role="GIAMGIA" EntitySet="GIAMGIAs" />
+      <End Role="SANPHAM" EntitySet="SANPHAMs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GIOHANG_TAIKHOAN" Association="Self.FK_GIOHANG_TAIKHOAN">
+      <End Role="TAIKHOAN" EntitySet="TAIKHOANs" />
+      <End Role="GIOHANG" EntitySet="GIOHANGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SANPHAM_HANGSANXUAT" Association="Self.FK_SANPHAM_HANGSANXUAT">
+      <End Role="HANGSANXUAT" EntitySet="HANGSANXUATs" />
+      <End Role="SANPHAM" EntitySet="SANPHAMs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SANPHAM_LOAISANPHAM" Association="Self.FK_SANPHAM_LOAISANPHAM">
+      <End Role="LOAISANPHAM" EntitySet="LOAISANPHAMs" />
+      <End Role="SANPHAM" EntitySet="SANPHAMs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TINTUC_NHOMTIN" Association="Self.FK_TINTUC_NHOMTIN">
+      <End Role="NHOMTIN" EntitySet="NHOMTINs" />
+      <End Role="TINTUC" EntitySet="TINTUCs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TINTUC_TAIKHOAN" Association="Self.FK_TINTUC_TAIKHOAN">
+      <End Role="TAIKHOAN" EntitySet="TAIKHOANs" />
+      <End Role="TINTUC" EntitySet="TINTUCs" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

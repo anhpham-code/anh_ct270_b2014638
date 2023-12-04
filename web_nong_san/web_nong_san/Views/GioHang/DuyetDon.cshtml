@@ -1,0 +1,149 @@
+﻿@model IEnumerable<web_nong_san.DONHANG>
+@{
+    ViewBag.Title = "Danh Sách Đơn Hàng";
+    Layout = "~/Views/Shared/_LayoutAdmin2.cshtml";
+}
+
+<title>Duyệt Đơn</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="~/Assets/plugin-table/jquery.dataTables.min.css" rel="stylesheet" />
+
+<div>
+    <table class="table table-bordered table-striped" id="myTable">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th>
+                    Trạng thái
+                </th>
+                <th>
+                    Tổng tiền
+                </th>
+                <th>
+                    Tên người đặt
+                </th>
+                <th>
+                    Hình thức
+                </th>
+               @* <th>
+                    Địa chỉ
+                </th>*@
+                <th>
+                    Hành động
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @{
+                        List<string> tragthai = new List<string> { "Chưa duyệt", "Đã duyệt" };
+
+                    }
+                    <td>
+                        @tragthai[item.TRANGTHAI ?? 0]
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TONGTIEN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TAIKHOAN.TENDANGNHAP)
+                    </td>
+                    @{
+                        List<string> myList = new List<string> { "", "Khi nhận hàng", "Thẻ ngân hàng", "Ví điện tử" };
+
+                    }
+                    <td>
+                        @myList[item.HINHTHUCTHANHTOAN ?? 0]
+                    </td>
+                    @*<td class="myText">
+                        @Html.DisplayFor(modelItem => item.DIACHINHANHANG)
+                    </td>*@
+                    <td>
+                        @Html.ActionLink("Xem", "XemChiTietDonDuyet", new { madh = item.MADH }, new { @class = "btn btn-primary" })
+                        <button class="delete-button btn btn-secondary " data-masp="@item.MADH" onclick="confirmDuyet(@item.MADH)">Duyệt</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal" id="xacNhanDuyetDonHangModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận duyệt</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn duyệt?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="DuyetDonHang()">Duyệt</button>
+                <button type="button" class="btn btn-secondary" onclick="closexacNhanDuyetDonHangModal()">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Assets/plugin-table/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json"></script>
+<script>
+    var js = jQuery.noConflict(true);
+    js(document).ready(function () {
+        js('#myTable').DataTable({
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json"
+            }
+        });
+    });
+    /*$(document).ready(function () {
+        var maxLength = 50; // Change this value to your desired character limit
+        $('.myText').each(function () {
+            var $myText = $(this);
+            var text = $myText.text();
+
+            if (text.length > maxLength) {
+                $myText.text(text.substring(0, maxLength) + '...');
+            }
+        });
+    });*/
+    var madh_canduyet;
+
+    // Xác nhận việc xóa
+    function confirmDuyet(madh) {
+        madh_canduyet = madh;
+        $("#xacNhanDuyetDonHangModal").modal("show");
+    }
+
+    // Xác nhận xóa
+    function DuyetDonHang() {
+        $("#xacNhanDuyetDonHangModal").modal("hide"); // Đóng modal xác nhận
+
+        // Sử dụng maspToDelete để thực hiện xóa sản phẩm ở đây
+        var MADH = madh_canduyet;
+
+        $.ajax({
+            url: "/GioHang/LuuDuyetDonHang",
+            type: "POST",
+            data: { madh: MADH },
+            success: function (response) {
+                // Xử lý phản hồi từ Controller (nếu cần)
+                if (response.success) {
+                    // Hiển thị modal xóa thành công
+                    /*$("#deleteSuccessModal").modal("show");*/
+                }
+                // Tải lại trang sau khi xóa (có thể cần điều chỉnh dựa trên yêu cầu của bạn)
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert("Lỗi: " + error);
+            }
+        });
+    }
+    function closeXacNhanDuyetDonHangModal() {
+        $('#xacNhanDuyetDonHangModal').modal('hide');
+    }
+</script>

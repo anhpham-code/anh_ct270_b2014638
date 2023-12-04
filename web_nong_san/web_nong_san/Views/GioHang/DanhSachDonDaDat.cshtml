@@ -1,0 +1,76 @@
+﻿@model IEnumerable<web_nong_san.DONHANG>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DanhSachDonDaDat</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MADH)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TRANGTHAI)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TONGTIEN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MATK)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DIEMSUDUNG)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DIEMTICH)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HINHTHUCTHANHTOAN)
+            </th>
+            @*<th></th>*@
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MADH)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TRANGTHAI)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TONGTIEN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MATK)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DIEMSUDUNG)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DIEMTICH)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HINHTHUCTHANHTOAN)
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>

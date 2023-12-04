@@ -1,0 +1,244 @@
+﻿@model web_nong_san.GIOHANG
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán đơn hàng</title>
+    <!-- Add Bootstrap CSS link -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <header class="bg-dark text-white text-center py-3">
+        <h1>Thanh Toán</h1>
+    </header>
+
+    @using (Html.BeginForm("ThemDon", "GioHang", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation", novalidate = "novalidate", id = "myForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="container mt-4">
+            <div class="mb-3">
+                <label for="fullname" class="form-label">Tên:</label>
+                <input type="text" class="form-control" id="fullname" name="fullname" value="@Html.DisplayFor(model => model.TAIKHOAN.HOTEN)" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Địa chỉ Email:</label>
+                <input type="email" class="form-control" id="email" name="email" value=@Html.DisplayFor(model => model.TAIKHOAN.EMAIL) required>
+            </div>
+
+            <div class="mb-3">
+                <label for="phone" class="form-label">SĐT:</label>
+                <input type="tel" class="form-control" id="phone" name="phone" value=@Html.DisplayFor(model => model.TAIKHOAN.SDT) required>
+            </div>
+
+            <div class="mb-3 d-none">
+                <label for="address" class="form-label">Địa chỉ:</label>
+                <input type="text" class="form-control" id="diachi" name="diachi" value="" required readonly>
+            </div>
+            <div class="mb-3">
+                <label for="tt" class="form-label">Tổng tiền:</label>
+                <input type="number" class="form-control" id="tt" name="tt" value="@Html.DisplayFor(model => model.TONGTIEN)" required>
+            </div>
+            @{
+                long? diemtich = Model.TONGTIEN / 100;
+                long? diemtichluykhadung = Model.TAIKHOAN.DIEMTICHLUY;
+                long? diemtichluychophep = Model.TONGTIEN / 10;
+                long? diemsudung = diemtichluykhadung;
+                if (diemtichluykhadung > diemtichluychophep)
+                {
+                    diemsudung = diemtichluychophep;
+                }
+            }
+            <div class="mb-3">
+                <label for="dsd" class="form-label">Điểm sử dụng:</label>
+                <input type="number" class="form-control" id="dsd" name="diemsudung" max="@Html.DisplayFor(model => model.TAIKHOAN.DIEMTICHLUY)" value="@diemsudung" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="dt" class="form-label">Điểm tích:</label>
+                <input type="number" class="form-control" id="dt" name="diemtich" value="@diemtich" required>
+            </div>
+            <div id="paymentMethods" class="mb-3">
+                <label>Chọn phương thức thanh toán:</label>
+                <div class="form-check">
+                    <input type="radio" id="money" name="PHUONGTHUCTHANHTOAN" value="1" class="form-check-input">
+                    <label for="money" class="form-check-label">Thanh toán khi nhận hàng</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" id="bankcard" name="PHUONGTHUCTHANHTOAN" value="2" class="form-check-input">
+                    <label for="bankcard" class="form-check-label">Thanh toán qua thẻ ngân hàng</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" id="e-pay" name="PHUONGTHUCTHANHTOAN" value="3" class="form-check-input">
+                    <label for="e-pay" class="form-check-label">Thanh toán qua ví điện tử</label>
+                </div>
+            </div>
+            <label>Chọn địa chỉ nhận hàng:</label>
+            <br />
+            <select class="form-select form-select-sm mb-3" id="city" name="city" aria-label=".form-select-sm">
+                <option value="" selected>Chọn tỉnh thành</option>
+                <!-- ... options for cities ... -->
+            </select>
+            <select class="form-select form-select-sm mb-3" id="district" name="district" aria-label=".form-select-sm">
+                <option value="" selected>Chọn quận huyện</option>
+                <!-- ... options for districts ... -->
+            </select>
+
+            <select class="form-select form-select-sm" id="ward" name="ward" aria-label=".form-select-sm">
+                <option value="" selected>Chọn phường xã</option>
+                <!-- ... options for wards ... -->
+            </select>
+
+
+
+
+            @*                @Html.ActionLink("Đặt", "ThemDon", "GioHang", null, new { @class = "btn btn-primary" })
+            *@
+            <button type="submit" class="btn btn-primary">Đặt </button>
+
+        </div>
+    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            console.log("JavaScript is working!");
+            $("form").submit(function (event) {
+                if (!this.checkValidity()) {
+                    submitAddress();
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                }
+
+                this.classList.add('was-validated');
+                if (!$("input[name='PHUONGTHUCTHANHTOAN']:checked").val()) {
+                    event.preventDefault();
+                    alert("Vui lòng chọn một phương thức thanh toán.");
+                }
+            });
+
+            var citis = $("#city");
+            var districts = $("#district");
+            var wards = $("#ward");
+
+            var Parameter = {
+                url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+                method: "GET",
+                responseType: "json",
+            };
+
+            axios(Parameter)
+                .then(function (result) {
+                    renderCity(result.data);
+                });
+
+            function renderCity(data) {
+                for (const x of data) {
+                    citis.append(new Option(x.Name, x.Id));
+                }
+
+                citis.on("change", function () {
+                    updateDiachi();
+                    districts.empty();
+                    wards.empty();
+                    if (this.value !== "") {
+                        const result = data.filter(n => n.Id === this.value);
+
+                        for (const k of result[0].Districts) {
+                            districts.append(new Option(k.Name, k.Id));
+                        }
+                    }
+
+                    console.log("City selected: " + this.value);
+                });
+
+                districts.on("change", function () {
+                    updateDiachi();
+                    wards.empty();
+                    const dataCity = data.filter((n) => n.Id === citis.val());
+                    if (this.value !== "") {
+                        const dataWards = dataCity[0].Districts.find(n => n.Id === this.value)?.Wards;
+
+                        if (dataWards) {
+                            for (const w of dataWards) {
+                                wards.append(new Option(w.Name, w.Id));
+                            }
+                        }
+                    }
+
+                    console.log("District selected: " + this.value);
+                });
+                wards.on("change", function () {
+                    updateDiachi();
+                    // ... Các mã khác của bạn ...
+                });
+            }
+            function updateDiachi() {
+                var selectedCity = citis.find(":selected").text();
+                var selectedDistrict = districts.find(":selected").text();
+                var selectedWard = wards.find(":selected").text();
+
+                var selectedAddress = "";
+                if (selectedCity !== "") {
+                    selectedAddress += selectedCity;
+                }
+                if (selectedDistrict !== "") {
+                    selectedAddress += ", " + selectedDistrict;
+                }
+                if (selectedWard !== "") {
+                    selectedAddress += ", " + selectedWard;
+                }
+
+                $("#diachi").val(selectedAddress);
+            }
+            function submitAddress() {
+                var selectedCity = citis.find(":selected").text();
+                var selectedDistrict = districts.find(":selected").text();
+                var selectedWard = wards.find(":selected").text();
+
+                // Lấy giá trị của các trường xã, phường, tỉnh
+                var selectedWardValue = wards.val();
+                var selectedDistrictValue = districts.val();
+                var selectedCityValue = citis.val();
+
+                // Kết hợp các thành phần địa chỉ đã chọn thành một chuỗi duy nhất
+                var selectedAddress = selectedWard + ", " + selectedDistrict + ", " + selectedCity;
+                //var someValueForDiachi = "Giá trị bạn muốn sử dụng";
+
+                // Gán giá trị vào trường 'diachi' trong form
+                $("#diachi").val(selectedAddress);
+                /*console.log("Địa chỉ đã chọn: " + selectedAddress);*/
+
+                /*// Lấy dữ liệu của biểu mẫu
+                var formData = new FormData($("#myForm")[0]);*/
+
+                /*// Thêm địa chỉ đã chọn vào dữ liệu biểu mẫu
+                formData.append("diachi", selectedAddress);
+*/
+                /*// Bạn có thể điều chỉnh URL dựa trên yêu cầu của controller .NET của bạn
+                var submitUrl = "/GioHang/ThemDon";
+
+                // Thực hiện yêu cầu AJAX để gửi dữ liệu
+                axios.post(submitUrl, formData)
+                    .then(function (response) {
+                        // Xử lý phản hồi nếu cần
+                        console.log(response.data);
+                    })
+                    .catch(function (error) {
+                        // Xử lý lỗi
+                        console.error(error);
+                    });*/
+            }
+        });
+    </script>
+</body>
+</html>
